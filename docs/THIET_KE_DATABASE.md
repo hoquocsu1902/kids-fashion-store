@@ -2,11 +2,14 @@
 
 > Owner: **Hồ Quốc Sử**. Chỉ Sử được sửa schema. Thành viên khác cần field mới → tạo issue.
 > Script chuẩn: [`../Database/QL_ThoiTrangTreEm.sql`](../Database/QL_ThoiTrangTreEm.sql) (chạy lại được nhiều lần).
+> Bản vẽ ERD: [`ERD.md`](ERD.md) (Mermaid) · [`ERD.dbml`](ERD.dbml) (dán vào dbdiagram.io).
 > Phiên bản schema: **v1.0**
 
 ---
 
 ## 1. Sơ đồ quan hệ (ERD logic)
+
+> Sơ đồ đầy đủ kèm thuộc tính từng bảng: [`ERD.md`](ERD.md).
 
 ```
 Users ──1─N──> Orders ──1─N──> OrderDetails ──N─1──> ProductVariants ──N─1──> Products
