@@ -1,0 +1,73 @@
+# =====================================================================
+# .gitignore - Do an Lap trinh Web: KidsFashionStore (ASP.NET MVC 5)
+# =====================================================================
+
+# --- Visual Studio ---
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.rsuser
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+
+# --- Build output ---
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Ll]og/
+[Ll]ogs/
+x64/
+x86/
+build/
+bld/
+[Oo]ut/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# --- NuGet ---
+packages/
+*.nupkg
+*.snupkg
+
+# --- Test results / coverage ---
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+TestResult.xml
+
+# --- Publish ---
+publish/
+PublishProfiles/
+*.publishproj
+*.pubxml
+*.pubxml.user
+
+# --- IIS Express ---
+*.Cache
+*.applicationHost.config
+
+# --- He dieu hanh ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# --- KHONG commit thong tin nhay cam (quy tac bat buoc cua nhom) ---
+*.secrets.config
+secrets/
+connectionStrings.local.config
+
+# --- Ghi chu ---
+# 1. Content/images/products/ PHAI duoc commit (anh san pham dung cho demo).
+# 2. Models/*.edmx, *.edmx.diagram, *.context.tt PHAI duoc commit (EF Database First).
+# 3. Web.config duoc commit nhung KHONG dat mat khau that / connection string ca nhan.

@@ -1,0 +1,19 @@
+# Chuan hoa dau dong file cho ca nhom (dev chinh tren Windows + Visual Studio)
+* text=auto
+
+*.cs        text diff=csharp
+*.cshtml    text
+*.config    text
+*.sql       text
+*.sln       text eol=crlf
+*.csproj    text eol=crlf
+*.md        text
+*.sh        text eol=lf
+
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.pdf       binary
+*.zip       binary

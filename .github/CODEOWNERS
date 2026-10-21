@@ -1,0 +1,27 @@
+# CODEOWNERS — người chịu trách nhiệm từng khu vực
+# Cú pháp: <pattern>  <@username>
+# Bổ sung username của Huy và Tú sau khi mời vào repo.
+
+# Database & schema: chỉ Sử chốt
+/Database/                          @hoquocsu1902
+/docs/THIET_KE_DATABASE.md          @hoquocsu1902
+
+# Integration, cấu hình, nhánh develop
+/.github/                           @hoquocsu1902
+/CONTRIBUTING.md                    @hoquocsu1902
+
+# Customer UI (Huy) — bỏ comment sau khi mời thành viên
+# /src/KidsFashionStore/Views/Shared/_Layout.cshtml      @<huy>
+# /src/KidsFashionStore/Views/Shared/_CategoryMenu.cshtml @<huy>
+# /src/KidsFashionStore/Views/Product/                   @<huy>
+# /src/KidsFashionStore/Views/Home/                      @<huy>
+# /src/KidsFashionStore/Content/                         @<huy>
+
+# Admin + API (Tú) — bỏ comment sau khi mời thành viên
+# /src/KidsFashionStore/Views/Shared/_AdminLayout.cshtml @<tu>
+# /src/KidsFashionStore/Views/AdminProduct/              @<tu>
+# /src/KidsFashionStore/Views/AdminCategory/             @<tu>
+# /src/KidsFashionStore/Views/AdminOrder/                @<tu>
+# /src/KidsFashionStore/Views/Promotion/                 @<tu>
+# /src/KidsFashionStore/Views/Report/                    @<tu>
+# /src/KidsFashionStore/Controllers/ProductApiController.cs @<tu>
