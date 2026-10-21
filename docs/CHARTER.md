@@ -48,11 +48,11 @@ sản phẩm, đơn hàng, khuyến mãi, doanh thu.
 
 ## 4. Thành viên & vai trò
 
-| Thành viên | MSSV | Vai trò chính | Module phụ trách |
-|---|---|---|---|
-| Trần Nhật Huy | 2001240182 | Customer UI / Frontend | Layout khách, Home, Product list/search/filter/sort, Product detail + related, Account UI, CSS |
-| Hồ Quốc Sử | 2001240412 | Database + Integration | ERD/SQL, EF model, Auth + Session, Cart, Checkout/Order/History, merge & smoke test |
-| Võ Ngọc Tú | 2001240534 | Admin / Backend nghiệp vụ | Admin layout/dashboard, CRUD Category/Product/Variant/Image, Order management, Promotion, Revenue, Web API |
+| Thành viên | MSSV | GitHub | Vai trò chính | Module phụ trách |
+|---|---|---|---|---|
+| Trần Nhật Huy | 2001240182 | [@huytran995399](https://github.com/huytran995399) | Customer UI / Frontend | Layout khách, Home, Product list/search/filter/sort, Product detail + related, Account UI, CSS |
+| Hồ Quốc Sử | 2001240412 | [@hoquocsu1902](https://github.com/hoquocsu1902) | Database + Integration | ERD/SQL, EF model, Auth + Session, Cart, Checkout/Order/History, merge & smoke test |
+| Võ Ngọc Tú | 2001240534 | [@vongoctu08102006](https://github.com/vongoctu08102006) | Admin / Backend nghiệp vụ | Admin layout/dashboard, CRUD Category/Product/Variant/Image, Order management, Promotion, Revenue, Web API |
 
 Chi tiết từng đầu việc: [`PHAN_CONG.md`](PHAN_CONG.md).
 
