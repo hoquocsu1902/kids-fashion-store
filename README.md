@@ -137,6 +137,7 @@ Chi tiết đầy đủ: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 | [`docs/KE_HOACH_DU_AN.md`](docs/KE_HOACH_DU_AN.md) | Kế hoạch đồ án: chức năng F01–F24, mốc tuần, gate, rủi ro, DoD |
 | [`docs/PHAN_CONG.md`](docs/PHAN_CONG.md) | Phân công chi tiết 3 thành viên + điểm giao tiếp bắt buộc |
 | [`docs/THIET_KE_DATABASE.md`](docs/THIET_KE_DATABASE.md) | 9 bảng, quan hệ, quy ước dữ liệu, changelog schema |
+| [`docs/ERD.md`](docs/ERD.md) | ERD v1 (Mermaid) + quyết định thiết kế + đối chiếu rubric |
 | [`docs/KIEM_THU.md`](docs/KIEM_THU.md) | Smoke test ST01–ST15, test biên, checklist tuần 12/14, kịch bản demo |
 | [`docs/Ke_hoach_do_an_Lap_trinh_Web.pdf`](docs/Ke_hoach_do_an_Lap_trinh_Web.pdf) | Bản kế hoạch đồ án gốc (PDF) của nhóm |
 

@@ -1,0 +1,130 @@
+// =====================================================================
+// KidsFashionStore — QL_ThoiTrangTreEm
+// ERD v1.0 (khớp Database/QL_ThoiTrangTreEm.sql)
+// Cách dùng: mở https://dbdiagram.io → New Diagram → dán toàn bộ file này.
+// =====================================================================
+
+Table Users {
+  UserId int [pk, increment]
+  Username nvarchar(50) [not null, unique]
+  PasswordHash varchar(64) [not null, note: 'SHA-256 hex chữ hoa']
+  FullName nvarchar(100) [not null]
+  Email varchar(100) [not null, unique]
+  Phone varchar(20)
+  Address nvarchar(255)
+  Role varchar(20) [not null, default: 'Customer', note: 'Customer | Admin']
+  IsActive bit [not null, default: 1]
+  CreatedDate datetime [not null, default: `GETDATE()`]
+
+  indexes {
+    Username [unique]
+    Email [unique]
+  }
+}
+
+Table Categories {
+  CategoryId int [pk, increment]
+  CategoryName nvarchar(100) [not null]
+  ParentId int [note: 'NULL = danh mục cha']
+  Description nvarchar(255)
+  IsActive bit [not null, default: 1]
+}
+
+Table Products {
+  ProductId int [pk, increment]
+  ProductName nvarchar(200) [not null]
+  CategoryId int [not null]
+  Price decimal(18,0) [not null, note: 'VND, >= 0']
+  Description nvarchar(max)
+  MainImage varchar(255)
+  Gender varchar(10) [note: 'Boy | Girl | Unisex']
+  CreatedDate datetime [not null, default: `GETDATE()`]
+  IsActive bit [not null, default: 1]
+
+  indexes {
+    CategoryId
+  }
+}
+
+Table ProductVariants {
+  VariantId int [pk, increment]
+  ProductId int [not null]
+  Size varchar(10) [not null]
+  Color nvarchar(30) [not null]
+  StockQuantity int [not null, default: 0, note: '>= 0']
+
+  indexes {
+    (ProductId, Size, Color) [unique]
+  }
+}
+
+Table ProductImages {
+  ImageId int [pk, increment]
+  ProductId int [not null]
+  ImageUrl varchar(255) [not null]
+  SortOrder int [not null, default: 0]
+
+  indexes {
+    ProductId
+  }
+}
+
+Table Orders {
+  OrderId int [pk, increment]
+  UserId int [not null]
+  OrderDate datetime [not null, default: `GETDATE()`]
+  ReceiverName nvarchar(100) [not null]
+  Phone varchar(20) [not null]
+  ShippingAddress nvarchar(255) [not null]
+  TotalAmount decimal(18,0) [not null, default: 0]
+  Status varchar(20) [not null, default: 'Pending', note: 'Pending | Confirmed | Shipping | Completed | Cancelled']
+  Note nvarchar(255)
+
+  indexes {
+    UserId
+    (Status, OrderDate)
+  }
+}
+
+Table OrderDetails {
+  OrderDetailId int [pk, increment]
+  OrderId int [not null]
+  VariantId int [not null]
+  Quantity int [not null, note: '> 0']
+  UnitPrice decimal(18,0) [not null, note: 'Giá tại thời điểm mua']
+
+  indexes {
+    OrderId
+  }
+}
+
+Table Promotions {
+  PromotionId int [pk, increment]
+  PromotionName nvarchar(150) [not null]
+  DiscountPercent int [not null, note: '0 - 100']
+  StartDate date [not null]
+  EndDate date [not null]
+  IsActive bit [not null, default: 1]
+}
+
+Table ProductPromotions {
+  ProductId int [not null]
+  PromotionId int [not null]
+
+  indexes {
+    (ProductId, PromotionId) [pk]
+  }
+}
+
+// ---------------------------------------------------------------------
+// Khóa ngoại
+// ---------------------------------------------------------------------
+Ref: Categories.ParentId > Categories.CategoryId
+Ref: Products.CategoryId > Categories.CategoryId
+Ref: ProductVariants.ProductId > Products.ProductId
+Ref: ProductImages.ProductId > Products.ProductId
+Ref: Orders.UserId > Users.UserId
+Ref: OrderDetails.OrderId > Orders.OrderId
+Ref: OrderDetails.VariantId > ProductVariants.VariantId
+Ref: ProductPromotions.ProductId > Products.ProductId
+Ref: ProductPromotions.PromotionId > Promotions.PromotionId
