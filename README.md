@@ -14,9 +14,9 @@ Website bán và quản lý mặt hàng thời trang trẻ em gồm 2 khu vực:
 
 | Thành viên | MSSV | GitHub | Module chính |
 |---|---|---|---|
-| Trần Nhật Huy | 2001240182 | *(cập nhật)* | Customer UI: layout, home, product list/search/filter, product detail, account UI, CSS |
+| Trần Nhật Huy | 2001240182 | [@huytran995399](https://github.com/huytran995399) | Customer UI: layout, home, product list/search/filter, product detail, account UI, CSS |
 | Hồ Quốc Sử | 2001240412 | [@hoquocsu1902](https://github.com/hoquocsu1902) | Database/ERD, EF Model, Auth + Session, Cart, Checkout/Order, Integration |
-| Võ Ngọc Tú | 2001240534 | *(cập nhật)* | Admin: layout/dashboard, CRUD Category/Product/Variant/Image, Order management, Promotion, Revenue, Web API |
+| Võ Ngọc Tú | 2001240534 | [@vongoctu08102006](https://github.com/vongoctu08102006) | Admin: layout/dashboard, CRUD Category/Product/Variant/Image, Order management, Promotion, Revenue, Web API |
 
 Chi tiết phân công, ma trận trách nhiệm và điểm giao tiếp: [`docs/PHAN_CONG.md`](docs/PHAN_CONG.md).
 

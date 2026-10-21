@@ -1,27 +1,40 @@
 # CODEOWNERS — người chịu trách nhiệm từng khu vực
 # Cú pháp: <pattern>  <@username>
-# Bổ sung username của Huy và Tú sau khi mời vào repo.
 
 # Database & schema: chỉ Sử chốt
 /Database/                          @hoquocsu1902
 /docs/THIET_KE_DATABASE.md          @hoquocsu1902
+/docs/ERD.md                        @hoquocsu1902
+/docs/ERD.dbml                      @hoquocsu1902
 
-# Integration, cấu hình, nhánh develop
+# Integration, tài liệu nhóm, cấu hình
 /.github/                           @hoquocsu1902
 /CONTRIBUTING.md                    @hoquocsu1902
 
-# Customer UI (Huy) — bỏ comment sau khi mời thành viên
-# /src/KidsFashionStore/Views/Shared/_Layout.cshtml      @<huy>
-# /src/KidsFashionStore/Views/Shared/_CategoryMenu.cshtml @<huy>
-# /src/KidsFashionStore/Views/Product/                   @<huy>
-# /src/KidsFashionStore/Views/Home/                      @<huy>
-# /src/KidsFashionStore/Content/                         @<huy>
+# Customer UI (Huy)
+/src/KidsFashionStore/Views/Shared/_Layout.cshtml       @huytran995399
+/src/KidsFashionStore/Views/Shared/_CategoryMenu.cshtml @huytran995399
+/src/KidsFashionStore/Views/Product/                    @huytran995399
+/src/KidsFashionStore/Views/Home/                       @huytran995399
+/src/KidsFashionStore/Views/Account/                    @huytran995399
+/src/KidsFashionStore/Content/                          @huytran995399
 
-# Admin + API (Tú) — bỏ comment sau khi mời thành viên
-# /src/KidsFashionStore/Views/Shared/_AdminLayout.cshtml @<tu>
-# /src/KidsFashionStore/Views/AdminProduct/              @<tu>
-# /src/KidsFashionStore/Views/AdminCategory/             @<tu>
-# /src/KidsFashionStore/Views/AdminOrder/                @<tu>
-# /src/KidsFashionStore/Views/Promotion/                 @<tu>
-# /src/KidsFashionStore/Views/Report/                    @<tu>
-# /src/KidsFashionStore/Controllers/ProductApiController.cs @<tu>
+# Admin + API (Tú)
+/src/KidsFashionStore/Views/Shared/_AdminLayout.cshtml @vongoctu08102006
+/src/KidsFashionStore/Views/AdminProduct/              @vongoctu08102006
+/src/KidsFashionStore/Views/AdminCategory/             @vongoctu08102006
+/src/KidsFashionStore/Views/AdminOrder/                @vongoctu08102006
+/src/KidsFashionStore/Views/Promotion/                 @vongoctu08102006
+/src/KidsFashionStore/Views/Report/                    @vongoctu08102006
+/src/KidsFashionStore/Controllers/AdminProductController.cs  @vongoctu08102006
+/src/KidsFashionStore/Controllers/AdminCategoryController.cs @vongoctu08102006
+/src/KidsFashionStore/Controllers/AdminOrderController.cs    @vongoctu08102006
+/src/KidsFashionStore/Controllers/PromotionController.cs     @vongoctu08102006
+/src/KidsFashionStore/Controllers/ReportController.cs        @vongoctu08102006
+/src/KidsFashionStore/Controllers/ProductApiController.cs    @vongoctu08102006
+
+# Cart/Order/Auth (Sử)
+/src/KidsFashionStore/Controllers/CartController.cs    @hoquocsu1902
+/src/KidsFashionStore/Controllers/OrderController.cs   @hoquocsu1902
+/src/KidsFashionStore/Controllers/AccountController.cs @hoquocsu1902
+/src/KidsFashionStore/Models/                          @hoquocsu1902
