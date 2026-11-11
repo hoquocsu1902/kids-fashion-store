@@ -1,0 +1,11 @@
+﻿<script>
+    // Đếm số sản phẩm đã tick + nút chọn tất cả / bỏ chọn (jQuery)
+    $(function () {
+        var boxes = $('input[name="SelectedProductIds"]');
+        function refresh() { $('#picked-count').text(boxes.filter(':checked').length); }
+        boxes.on('change', refresh);
+        $('#pick-all').on('click', function () { boxes.prop('checked', true); refresh(); });
+        $('#pick-none').on('click', function () { boxes.prop('checked', false); refresh(); });
+        refresh();
+    });
+</script>

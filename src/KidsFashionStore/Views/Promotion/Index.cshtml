@@ -1,0 +1,42 @@
+﻿@model List<KidsFashionStore.Models.ViewModels.Admin.PromotionRowViewModel>
+@{
+    ViewBag.Title = "Quản lý khuyến mãi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="toolbar">
+    <a class="btn btn-primary" href="@Url.Action("Create")">+ Thêm khuyến mãi</a>
+</div>
+<div class="card">
+    <div class="table-scroll">
+        <table class="grid">
+            <thead><tr><th>Tên khuyến mãi</th><th class="num">% giảm</th><th>Thời gian</th><th class="num">Sản phẩm</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td><strong>@p.PromotionName</strong></td>
+                    <td class="num">-@p.DiscountPercent%</td>
+                    <td>@p.StartDate.ToString("dd/MM/yyyy") → @p.EndDate.ToString("dd/MM/yyyy")</td>
+                    <td class="num">@p.ProductCount</td>
+                    <td><span class="badge @p.StatusCss">@p.StatusLabel</span></td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-sm" href="@Url.Action("Edit", new { id = p.PromotionId })">Sửa</a>
+                            @using (Html.BeginForm("ToggleActive", "Promotion", new { id = p.PromotionId }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm">@(p.IsActive ? "Tắt" : "Bật")</button>
+                            }
+                            <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", new { id = p.PromotionId })">Xóa</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="6" class="muted">Chưa có khuyến mãi nào.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

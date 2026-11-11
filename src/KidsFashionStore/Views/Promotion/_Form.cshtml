@@ -1,0 +1,49 @@
+﻿@model KidsFashionStore.Models.ViewModels.Admin.PromotionEditViewModel
+
+@Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+@Html.HiddenFor(m => m.PromotionId)
+
+<div class="form-row">
+    @Html.LabelFor(m => m.PromotionName, new { @class = "lbl" })
+    @Html.TextBoxFor(m => m.PromotionName, new { @class = "input", maxlength = 150 })
+    @Html.ValidationMessageFor(m => m.PromotionName, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.DiscountPercent, new { @class = "lbl" })
+    @Html.TextBoxFor(m => m.DiscountPercent, new { @class = "input sm", type = "number", min = 0, max = 100 })
+    @Html.ValidationMessageFor(m => m.DiscountPercent, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.StartDate, new { @class = "lbl" })
+    <input type="date" name="StartDate" class="input sm" value="@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("yyyy-MM-dd") : "")" />
+    @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.EndDate, new { @class = "lbl" })
+    <input type="date" name="EndDate" class="input sm" value="@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("yyyy-MM-dd") : "")" />
+    @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    <label class="choice">@Html.CheckBoxFor(m => m.IsActive) @Html.DisplayNameFor(m => m.IsActive)</label>
+</div>
+
+<div class="form-row">
+    <label class="lbl">Sản phẩm áp dụng (<span id="picked-count">0</span> đã chọn)</label>
+    <div class="actions" style="margin-bottom:6px">
+        <button type="button" class="btn btn-sm" id="pick-all">Chọn tất cả</button>
+        <button type="button" class="btn btn-sm" id="pick-none">Bỏ chọn</button>
+    </div>
+    <div class="check-list">
+        @foreach (var item in Model.AllProducts)
+        {
+            <label>
+                <input type="checkbox" name="SelectedProductIds" value="@item.ProductId" @(item.Checked ? "checked" : "") />
+                @item.ProductName <span class="muted">(@item.CategoryName)</span>
+            </label>
+        }
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model KidsFashionStore.Models.ViewModels.Admin.PromotionRowViewModel
+@{
+    ViewBag.Title = "Xóa khuyến mãi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="card">
+    <p>Xóa khuyến mãi <strong>@Model.PromotionName</strong> (-@Model.DiscountPercent%, @Model.StartDate.ToString("dd/MM/yyyy") → @Model.EndDate.ToString("dd/MM/yyyy"))?</p>
+    <div class="alert alert-warn">Khuyến mãi đang áp dụng cho <strong>@Model.ProductCount</strong> sản phẩm. Giá các sản phẩm đó sẽ về giá gốc. Đơn hàng cũ không bị ảnh hưởng (đã lưu UnitPrice).</div>
+    @using (Html.BeginForm("Delete", "Promotion", new { id = Model.PromotionId }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="actions">
+            <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+            <a class="btn" href="@Url.Action("Index")">Quay lại</a>
+        </div>
+    }
+</div>

@@ -1,0 +1,79 @@
+﻿@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.RevenueViewModel
+@{
+    ViewBag.Title = "Thống kê doanh thu";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var maxRevenue = Model.Monthly.Any() ? Model.Monthly.Max(m => m.Revenue) : 0m;
+}
+
+<div class="card">
+    @using (Html.BeginForm("Revenue", "Report", FormMethod.Get))
+    {
+        <div class="toolbar" style="margin-bottom:0">
+            <label>Từ ngày <input type="date" name="from" class="input sm" value="@(Model.From.HasValue ? Model.From.Value.ToString("yyyy-MM-dd") : "")" /></label>
+            <label>Đến ngày <input type="date" name="to" class="input sm" value="@(Model.To.HasValue ? Model.To.Value.ToString("yyyy-MM-dd") : "")" /></label>
+            <button type="submit" class="btn btn-primary">Thống kê</button>
+            <a class="btn" href="@Url.Action("Revenue")">Tất cả thời gian</a>
+        </div>
+    }
+    <div class="hint" style="margin-top:8px">Doanh thu chỉ tính các đơn ở trạng thái <strong>Hoàn thành</strong>. Lọc theo ngày đặt hàng.</div>
+</div>
+
+<div class="stats">
+    <div class="stat"><div class="num">@AdminFormat.Money(Model.TotalRevenue)</div><div class="lbl">Tổng doanh thu</div></div>
+    <div class="stat"><div class="num">@Model.CompletedOrders</div><div class="lbl">Đơn hoàn thành</div></div>
+    <div class="stat"><div class="num">@AdminFormat.Money(Model.AverageOrderValue)</div><div class="lbl">Giá trị trung bình / đơn</div></div>
+</div>
+
+<div class="two-col">
+    <div class="card">
+        <h2>Doanh thu theo tháng</h2>
+        @foreach (var m in Model.Monthly)
+        {
+            var width = maxRevenue > 0 ? (int)Math.Round((double)(m.Revenue / maxRevenue) * 100) : 0;
+            <div class="bar-row">
+                <div class="bar-label">@m.Label</div>
+                <div class="bar-track"><div class="bar-fill" style="width:@(width)%"></div></div>
+                <div class="bar-value">@AdminFormat.Money(m.Revenue)</div>
+            </div>
+            <div class="muted" style="margin:-4px 0 8px 80px">@m.OrderCount đơn</div>
+        }
+        @if (!Model.Monthly.Any())
+        {
+            <div class="muted">Chưa có đơn hoàn thành trong khoảng thời gian này.</div>
+        }
+    </div>
+
+    <div class="card">
+        <h2>Top 5 sản phẩm bán chạy (theo doanh thu)</h2>
+        <table class="grid">
+            <thead><tr><th>Sản phẩm</th><th class="num">SL bán</th><th class="num">Doanh thu</th></tr></thead>
+            <tbody>
+            @foreach (var t in Model.TopProducts)
+            {
+                <tr>
+                    <td><a href="@Url.Action("Details", "AdminProduct", new { id = t.ProductId })">@t.ProductName</a></td>
+                    <td class="num">@t.Quantity</td>
+                    <td class="num">@AdminFormat.Money(t.Revenue)</td>
+                </tr>
+            }
+            @if (!Model.TopProducts.Any())
+            {
+                <tr><td colspan="3" class="muted">Chưa có dữ liệu.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Số đơn theo trạng thái (cùng khoảng thời gian)</h2>
+    <div class="tabs">
+        @foreach (var s in OrderStatus.All)
+        {
+            int n;
+            Model.OrdersByStatus.TryGetValue(s, out n);
+            <span class="@OrderStatus.CssClass(s)" style="margin-right:8px">@OrderStatus.Label(s): @n</span>
+        }
+    </div>
+</div>
