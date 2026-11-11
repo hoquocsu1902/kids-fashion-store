@@ -1,0 +1,134 @@
+﻿@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.ProductManageViewModel
+@{
+    ViewBag.Title = "Sản phẩm: " + Model.ProductName;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div style="display:flex; gap:16px; flex-wrap:wrap">
+        @if (!string.IsNullOrEmpty(Model.MainImage)) { <img class="thumb-lg" src="@Url.Content(Model.MainImage)" alt="" /> }
+        <div style="flex:1; min-width:260px">
+            <h2 style="margin-bottom:6px">@Model.ProductName</h2>
+            <div>Danh mục: <strong>@Model.CategoryName</strong> &nbsp;|&nbsp; Dành cho: <strong>@AdminFormat.GenderLabel(Model.Gender)</strong></div>
+            <div>Giá: <strong>@AdminFormat.Money(Model.Price)</strong> &nbsp;|&nbsp;
+                <span class="badge @(Model.IsActive ? "badge-active" : "badge-hidden")">@(Model.IsActive ? "Đang bán" : "Đã ẩn")</span></div>
+            @if (Model.Promotions.Any())
+            {
+                <div>Khuyến mãi: @string.Join(", ", Model.Promotions)</div>
+            }
+            @if (!string.IsNullOrEmpty(Model.Description)) { <p class="muted">@Model.Description</p> }
+            <div class="actions">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", new { id = Model.ProductId })">Sửa thông tin</a>
+                <a class="btn btn-sm" href="@Url.Action("Index")">Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Biến thể (size - màu - tồn kho)</h2>
+    @if (!Model.Variants.Any())
+    {
+        <div class="alert alert-warn">Sản phẩm chưa có biến thể nào nên khách chưa thể thêm vào giỏ.</div>
+    }
+    <div class="table-scroll">
+        <table class="grid">
+            <thead><tr><th>Size</th><th>Màu</th><th>Tồn kho</th><th>Thao tác</th></tr></thead>
+            <tbody>
+            @foreach (var v in Model.Variants)
+            {
+                <tr>
+                    <td>@v.Size</td>
+                    <td>@v.Color</td>
+                    <td>
+                        @using (Html.BeginForm("UpdateVariantStock", "AdminProduct", FormMethod.Post, new { @class = "actions" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="variantId" value="@v.VariantId" />
+                            <input type="number" name="stockQuantity" value="@v.StockQuantity" min="0" max="100000" class="input sm" style="max-width:100px" />
+                            <button type="submit" class="btn btn-sm">Lưu</button>
+                            if (v.StockQuantity == 0) { <span class="badge badge-cancelled">Hết hàng</span> }
+                        }
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("DeleteVariant", "AdminProduct", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="variantId" value="@v.VariantId" />
+                            if (v.InOrders)
+                            {
+                                <span class="muted">Đã có trong đơn</span>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Xóa biến thể này?');">Xóa</button>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <h2 style="margin-top:18px">Thêm biến thể</h2>
+    @using (Html.BeginForm("AddVariant", "AdminProduct", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+        <div class="toolbar">
+            <input type="text" name="Size" class="input sm" list="size-suggest" placeholder="Size (vd 3-4T)" maxlength="10" required />
+            <datalist id="size-suggest">
+                <option value="0-6M" /><option value="6-12M" /><option value="1-2T" /><option value="3-4T" />
+                <option value="5-6T" /><option value="7-8T" /><option value="9-10T" />
+            </datalist>
+            <input type="text" name="Color" class="input sm" placeholder="Màu (vd Hồng)" maxlength="30" required />
+            <input type="number" name="StockQuantity" class="input sm" style="max-width:120px" placeholder="Tồn kho" min="0" max="100000" value="0" required />
+            <button type="submit" class="btn btn-primary">+ Thêm</button>
+        </div>
+    }
+</div>
+
+<div class="card">
+    <h2>Thư viện ảnh</h2>
+    <div class="gallery">
+        @foreach (var img in Model.Images)
+        {
+            <div class="item">
+                <img src="@Url.Content(img.ImageUrl)" alt="" />
+                <div style="margin:6px 0">@if (img.IsMain) { <span class="badge badge-completed">Ảnh chính</span> } else { <span class="muted">Ảnh phụ #@img.SortOrder</span> }</div>
+                @if (!img.IsMain)
+                {
+                    <div class="actions" style="justify-content:center">
+                        @using (Html.BeginForm("SetMainImage", "AdminProduct", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="imageId" value="@img.ImageId" />
+                            <button type="submit" class="btn btn-sm">Đặt chính</button>
+                        }
+                        @using (Html.BeginForm("DeleteImage", "AdminProduct", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="imageId" value="@img.ImageId" />
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Xóa ảnh này?');">Xóa</button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        @if (!Model.Images.Any()) { <span class="muted">Chưa có ảnh nào.</span> }
+    </div>
+
+    <h2 style="margin-top:18px">Thêm ảnh phụ</h2>
+    @using (Html.BeginForm("AddImage", "AdminProduct", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="productId" value="@Model.ProductId" />
+        <div class="toolbar">
+            <input type="file" name="imageFile" accept=".jpg,.jpeg,.png,.webp" required />
+            <button type="submit" class="btn btn-primary">Tải lên</button>
+            <span class="hint">.jpg/.png/.webp, tối đa 2 MB.</span>
+        </div>
+    }
+</div>

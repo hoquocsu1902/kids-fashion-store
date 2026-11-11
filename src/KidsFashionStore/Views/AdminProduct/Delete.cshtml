@@ -1,0 +1,26 @@
+﻿@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.ProductManageViewModel
+@{
+    ViewBag.Title = "Xóa sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool inOrders = ViewBag.InOrders != null && (bool)ViewBag.InOrders;
+}
+<div class="card">
+    <p>Bạn muốn xóa sản phẩm <strong>@Model.ProductName</strong> (@AdminFormat.Money(Model.Price), @Model.Variants.Count biến thể)?</p>
+    @if (inOrders)
+    {
+        <div class="alert alert-warn">Sản phẩm này đã có trong đơn hàng cũ nên sẽ chỉ bị <strong>ẨN</strong> (không xóa hẳn) để giữ nguyên lịch sử đơn hàng.</div>
+    }
+    else
+    {
+        <div class="alert alert-warn">Sản phẩm sẽ bị <strong>xóa hẳn</strong> cùng các biến thể, ảnh và liên kết khuyến mãi. Không thể hoàn tác.</div>
+    }
+    @using (Html.BeginForm("Delete", "AdminProduct", new { id = Model.ProductId }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="actions">
+            <button type="submit" class="btn btn-danger">@(inOrders ? "Xác nhận ẩn" : "Xác nhận xóa")</button>
+            <a class="btn" href="@Url.Action("Index")">Quay lại</a>
+        </div>
+    }
+</div>

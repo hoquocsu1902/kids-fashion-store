@@ -1,0 +1,68 @@
+﻿@using System.Web.Routing
+@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.ProductIndexViewModel
+@{
+    ViewBag.Title = "Quản lý sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var rv = new RouteValueDictionary { { "keyword", Model.Keyword }, { "categoryId", Model.CategoryId }, { "status", Model.Status } };
+}
+
+<div class="card">
+    @using (Html.BeginForm("Index", "AdminProduct", FormMethod.Get))
+    {
+        <div class="toolbar" style="margin-bottom:0">
+            <input type="text" name="keyword" class="input" style="max-width:240px" value="@Model.Keyword" placeholder="Tìm theo tên sản phẩm..." />
+            @Html.DropDownList("categoryId", Model.CategoryOptions, "-- Tất cả danh mục --", new { @class = "input", style = "max-width:260px" })
+            <select name="status" class="input" style="max-width:160px">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.Status))">Mọi trạng thái</option>
+                <option value="active" selected="@(Model.Status == "active")">Đang bán</option>
+                <option value="hidden" selected="@(Model.Status == "hidden")">Đã ẩn</option>
+            </select>
+            <button type="submit" class="btn">Lọc</button>
+            <a class="btn" href="@Url.Action("Index")">Xóa lọc</a>
+            <span class="spacer"></span>
+            <a class="btn btn-primary" href="@Url.Action("Create")">+ Thêm sản phẩm</a>
+        </div>
+    }
+</div>
+
+<div class="card">
+    <div class="muted" style="margin-bottom:8px">Tìm thấy @Model.TotalItems sản phẩm</div>
+    <div class="table-scroll">
+        <table class="grid">
+            <thead>
+                <tr><th>Ảnh</th><th>Tên sản phẩm</th><th>Danh mục</th><th class="num">Giá</th><th class="num">Biến thể / Tồn</th><th>Trạng thái</th><th>Thao tác</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model.Items)
+            {
+                <tr>
+                    <td>@if (!string.IsNullOrEmpty(p.MainImage)) { <img class="thumb" src="@Url.Content(p.MainImage)" alt="" /> }</td>
+                    <td><a href="@Url.Action("Details", new { id = p.ProductId })"><strong>@p.ProductName</strong></a><div class="muted">@AdminFormat.GenderLabel(p.Gender)</div></td>
+                    <td>@p.CategoryName</td>
+                    <td class="num">@AdminFormat.Money(p.Price)</td>
+                    <td class="num">@p.VariantCount / @p.TotalStock</td>
+                    <td><span class="badge @(p.IsActive ? "badge-active" : "badge-hidden")">@(p.IsActive ? "Đang bán" : "Đã ẩn")</span></td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-sm" href="@Url.Action("Details", new { id = p.ProductId })">Biến thể/Ảnh</a>
+                            <a class="btn btn-sm" href="@Url.Action("Edit", new { id = p.ProductId })">Sửa</a>
+                            @using (Html.BeginForm("ToggleActive", "AdminProduct", new { id = p.ProductId }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm">@(p.IsActive ? "Ẩn" : "Hiện")</button>
+                            }
+                            <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", new { id = p.ProductId })">Xóa</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Items.Any())
+            {
+                <tr><td colspan="7" class="muted">Không có sản phẩm phù hợp.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    @Html.Partial("_AdminPager", new KidsFashionStore.Models.ViewModels.Admin.PagerModel(Model.Page, Model.TotalPages, "Index", rv))
+</div>

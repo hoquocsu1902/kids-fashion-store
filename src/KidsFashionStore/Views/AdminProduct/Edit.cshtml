@@ -1,0 +1,18 @@
+﻿@model KidsFashionStore.Models.ViewModels.Admin.ProductEditViewModel
+@{
+    ViewBag.Title = "Sửa sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="card">
+    @using (Html.BeginForm("Edit", "AdminProduct", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Partial("_Form", Model)
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <a class="btn" href="@Url.Action("Details", new { id = Model.ProductId })">Biến thể / Ảnh</a>
+            <a class="btn" href="@Url.Action("Index")">Hủy</a>
+        </div>
+    }
+</div>
+@section scripts { @Scripts.Render("~/bundles/jqueryval") }

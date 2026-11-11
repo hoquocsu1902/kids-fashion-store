@@ -1,0 +1,51 @@
+﻿@model KidsFashionStore.Models.ViewModels.Admin.ProductEditViewModel
+
+@Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+@Html.HiddenFor(m => m.ProductId)
+
+<div class="form-row">
+    @Html.LabelFor(m => m.ProductName, new { @class = "lbl" })
+    @Html.TextBoxFor(m => m.ProductName, new { @class = "input", maxlength = 200 })
+    @Html.ValidationMessageFor(m => m.ProductName, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.CategoryId, new { @class = "lbl" })
+    @Html.DropDownListFor(m => m.CategoryId, Model.CategoryOptions, "-- Chọn danh mục --", new { @class = "input" })
+    @Html.ValidationMessageFor(m => m.CategoryId, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.Price, new { @class = "lbl" })
+    @Html.TextBoxFor(m => m.Price, new { @class = "input sm", type = "number", min = 0, step = 1000 })
+    @Html.ValidationMessageFor(m => m.Price, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    <label class="lbl">@Html.DisplayNameFor(m => m.Gender)</label>
+    <label class="choice">@Html.RadioButtonFor(m => m.Gender, "Boy") Bé trai</label>
+    <label class="choice">@Html.RadioButtonFor(m => m.Gender, "Girl") Bé gái</label>
+    <label class="choice">@Html.RadioButtonFor(m => m.Gender, "Unisex") Unisex</label>
+    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "field-error" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.Description, new { @class = "lbl" })
+    @Html.TextAreaFor(m => m.Description, new { @class = "input" })
+</div>
+
+<div class="form-row">
+    @Html.LabelFor(m => m.ImageFile, new { @class = "lbl" })
+    @if (!string.IsNullOrEmpty(Model.MainImage))
+    {
+        <div style="margin-bottom:6px"><img class="thumb-lg" src="@Url.Content(Model.MainImage)" alt="" /></div>
+        <div class="hint">Chọn file mới nếu muốn thay ảnh chính. Để trống để giữ ảnh hiện tại.</div>
+    }
+    <input type="file" name="ImageFile" accept=".jpg,.jpeg,.png,.webp" />
+    @Html.ValidationMessageFor(m => m.ImageFile, "", new { @class = "field-error" })
+    <div class="hint">Định dạng .jpg/.png/.webp, tối đa 2 MB.</div>
+</div>
+
+<div class="form-row">
+    <label class="choice">@Html.CheckBoxFor(m => m.IsActive) @Html.DisplayNameFor(m => m.IsActive)</label>
+</div>
