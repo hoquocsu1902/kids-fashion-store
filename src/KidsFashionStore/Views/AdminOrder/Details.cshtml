@@ -1,0 +1,78 @@
+﻿@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.OrderDetailsViewModel
+@{
+    ViewBag.Title = "Đơn hàng #" + Model.OrderId;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="two-col">
+    <div class="card">
+        <h2>Thông tin đơn</h2>
+        <table class="grid">
+            <tr><th style="width:140px">Ngày đặt</th><td>@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</td></tr>
+            <tr><th>Tài khoản</th><td>@Model.Username</td></tr>
+            <tr><th>Người nhận</th><td>@Model.ReceiverName</td></tr>
+            <tr><th>SĐT</th><td>@Model.Phone</td></tr>
+            <tr><th>Địa chỉ giao</th><td>@Model.ShippingAddress</td></tr>
+            <tr><th>Ghi chú</th><td>@(string.IsNullOrEmpty(Model.Note) ? "-" : Model.Note)</td></tr>
+            <tr><th>Trạng thái</th><td><span class="@OrderStatus.CssClass(Model.Status)">@OrderStatus.Label(Model.Status)</span></td></tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Cập nhật trạng thái</h2>
+        @if (Model.AllowedNextStatuses.Length == 0)
+        {
+            <div class="alert alert-warn">Đơn đã ở trạng thái cuối (@OrderStatus.Label(Model.Status)), không thể thay đổi.</div>
+        }
+        else
+        {
+            <p class="muted">Chọn trạng thái tiếp theo của đơn:</p>
+            <div class="actions">
+                @foreach (var next in Model.AllowedNextStatuses)
+                {
+                    using (Html.BeginForm("UpdateStatus", "AdminOrder", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="orderId" value="@Model.OrderId" />
+                        <input type="hidden" name="newStatus" value="@next" />
+                        if (next == OrderStatus.Cancelled)
+                        {
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Hủy đơn này? Tồn kho sẽ được hoàn lại.');">→ @OrderStatus.Label(next)</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary">→ @OrderStatus.Label(next)</button>
+                        }
+                    }
+                }
+            </div>
+        }
+        <div style="margin-top:14px"><a class="btn btn-sm" href="@Url.Action("Index")">← Danh sách đơn</a></div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Sản phẩm trong đơn</h2>
+    <div class="table-scroll">
+        <table class="grid">
+            <thead><tr><th>Ảnh</th><th>Sản phẩm</th><th>Size / Màu</th><th class="num">Đơn giá</th><th class="num">SL</th><th class="num">Thành tiền</th></tr></thead>
+            <tbody>
+            @foreach (var l in Model.Lines)
+            {
+                <tr>
+                    <td>@if (!string.IsNullOrEmpty(l.MainImage)) { <img class="thumb" src="@Url.Content(l.MainImage)" alt="" /> }</td>
+                    <td><a href="@Url.Action("Details", "AdminProduct", new { id = l.ProductId })">@l.ProductName</a></td>
+                    <td>@l.Size / @l.Color</td>
+                    <td class="num">@AdminFormat.Money(l.UnitPrice)</td>
+                    <td class="num">@l.Quantity</td>
+                    <td class="num">@AdminFormat.Money(l.LineTotal)</td>
+                </tr>
+            }
+            </tbody>
+            <tfoot>
+                <tr><td colspan="5" class="num"><strong>Tổng cộng</strong></td><td class="num"><strong>@AdminFormat.Money(Model.TotalAmount)</strong></td></tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

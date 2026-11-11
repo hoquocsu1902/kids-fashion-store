@@ -1,0 +1,58 @@
+﻿@using System.Web.Routing
+@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.OrderIndexViewModel
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var rv = new RouteValueDictionary { { "status", Model.Status }, { "keyword", Model.Keyword } };
+}
+
+<div class="tabs">
+    <a class="@(string.IsNullOrEmpty(Model.Status) ? "active" : "")" href="@Url.Action("Index", new { keyword = Model.Keyword })">Tất cả</a>
+    @foreach (var s in OrderStatus.All)
+    {
+        int n;
+        Model.StatusCounts.TryGetValue(s, out n);
+        <a class="@(Model.Status == s ? "active" : "")" href="@Url.Action("Index", new { status = s, keyword = Model.Keyword })">@OrderStatus.Label(s) (@n)</a>
+    }
+</div>
+
+<div class="card">
+    @using (Html.BeginForm("Index", "AdminOrder", FormMethod.Get))
+    {
+        <input type="hidden" name="status" value="@Model.Status" />
+        <div class="toolbar" style="margin-bottom:0">
+            <input type="text" name="keyword" class="input" style="max-width:300px" value="@Model.Keyword" placeholder="Mã đơn, tên người nhận hoặc SĐT..." />
+            <button type="submit" class="btn">Tìm</button>
+        </div>
+    }
+</div>
+
+<div class="card">
+    <div class="muted" style="margin-bottom:8px">@Model.TotalItems đơn hàng</div>
+    <div class="table-scroll">
+        <table class="grid">
+            <thead><tr><th>Mã</th><th>Ngày đặt</th><th>Tài khoản</th><th>Người nhận</th><th>SĐT</th><th class="num">Tổng tiền</th><th>Trạng thái</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var o in Model.Items)
+            {
+                <tr>
+                    <td><strong>#@o.OrderId</strong></td>
+                    <td>@o.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@o.Username</td>
+                    <td>@o.ReceiverName</td>
+                    <td>@o.Phone</td>
+                    <td class="num">@AdminFormat.Money(o.TotalAmount)</td>
+                    <td><span class="@OrderStatus.CssClass(o.Status)">@OrderStatus.Label(o.Status)</span></td>
+                    <td><a class="btn btn-sm" href="@Url.Action("Details", new { id = o.OrderId })">Chi tiết</a></td>
+                </tr>
+            }
+            @if (!Model.Items.Any())
+            {
+                <tr><td colspan="8" class="muted">Không có đơn hàng phù hợp.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    @Html.Partial("_AdminPager", new KidsFashionStore.Models.ViewModels.Admin.PagerModel(Model.Page, Model.TotalPages, "Index", rv))
+</div>
