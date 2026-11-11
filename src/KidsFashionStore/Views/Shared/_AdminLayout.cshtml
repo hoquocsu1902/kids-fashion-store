@@ -1,0 +1,51 @@
+﻿@{
+    var controller = (ViewContext.RouteData.Values["controller"] ?? "").ToString();
+    Func<string, string> active = c => string.Equals(controller, c, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Quản trị KidsFashionStore</title>
+    <link href="~/Content/admin.css" rel="stylesheet" />
+</head>
+<body class="admin">
+    <div class="admin-wrap">
+        <aside class="admin-sidebar">
+            <div class="brand">KidsFashionStore<small>Khu vực quản trị</small></div>
+            <nav>
+                <a class="@active("Admin")" href="@Url.Action("Index", "Admin")">Tổng quan</a>
+                <a class="@active("AdminCategory")" href="@Url.Action("Index", "AdminCategory")">Danh mục</a>
+                <a class="@active("AdminProduct")" href="@Url.Action("Index", "AdminProduct")">Sản phẩm</a>
+                <a class="@active("AdminOrder")" href="@Url.Action("Index", "AdminOrder")">Đơn hàng</a>
+                <a class="@active("Promotion")" href="@Url.Action("Index", "Promotion")">Khuyến mãi</a>
+                <a class="@active("Report")" href="@Url.Action("Revenue", "Report")">Doanh thu</a>
+                <div class="sep"></div>
+                <a href="~/api/products" target="_blank">Web API (JSON)</a>
+                <a href="@Url.Action("Index", "Home")">Xem website</a>
+                <a href="@Url.Action("Logout", "Account")">Đăng xuất</a>
+            </nav>
+        </aside>
+        <div class="admin-main">
+            <div class="admin-top">
+                <h1>@ViewBag.Title</h1>
+                <span class="muted">Quản trị viên</span>
+            </div>
+            <div class="admin-content">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success">@TempData["Success"]</div>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-error">@TempData["Error"]</div>
+                }
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

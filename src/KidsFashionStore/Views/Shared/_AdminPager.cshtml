@@ -1,0 +1,13 @@
+﻿@using System.Web.Routing
+@model KidsFashionStore.Models.ViewModels.Admin.PagerModel
+@if (Model.TotalPages > 1)
+{
+    <div class="pager">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            var rv = new RouteValueDictionary(Model.RouteValues);
+            rv["page"] = i;
+            <a class="@(i == Model.Page ? "active" : "")" href="@Url.Action(Model.Action, rv)">@i</a>
+        }
+    </div>
+}

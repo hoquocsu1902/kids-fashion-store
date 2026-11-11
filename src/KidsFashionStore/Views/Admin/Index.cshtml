@@ -1,0 +1,76 @@
+﻿@using KidsFashionStore.Helpers
+@model KidsFashionStore.Models.ViewModels.Admin.DashboardViewModel
+@{
+    ViewBag.Title = "Tổng quan";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="stats">
+    <div class="stat"><div class="num">@Model.TotalProducts</div><div class="lbl">Sản phẩm (@Model.ActiveProducts đang bán)</div></div>
+    <div class="stat"><div class="num">@Model.TotalCategories</div><div class="lbl">Danh mục</div></div>
+    <div class="stat"><div class="num">@Model.TotalCustomers</div><div class="lbl">Khách hàng</div></div>
+    <div class="stat"><div class="num">@Model.TotalOrders</div><div class="lbl">Đơn hàng (@Model.PendingOrders chờ xác nhận)</div></div>
+    <div class="stat"><div class="num">@AdminFormat.Money(Model.CompletedRevenue)</div><div class="lbl">Doanh thu (đơn hoàn thành)</div></div>
+</div>
+
+<div class="two-col">
+    <div class="card">
+        <h2>Đơn hàng gần đây</h2>
+        <div class="table-scroll">
+            <table class="grid">
+                <thead><tr><th>Mã</th><th>Người nhận</th><th class="num">Tổng tiền</th><th>Trạng thái</th></tr></thead>
+                <tbody>
+                @foreach (var o in Model.RecentOrders)
+                {
+                    <tr>
+                        <td><a href="@Url.Action("Details", "AdminOrder", new { id = o.OrderId })">#@o.OrderId</a></td>
+                        <td>@o.ReceiverName</td>
+                        <td class="num">@AdminFormat.Money(o.TotalAmount)</td>
+                        <td><span class="@OrderStatus.CssClass(o.Status)">@OrderStatus.Label(o.Status)</span></td>
+                    </tr>
+                }
+                @if (!Model.RecentOrders.Any())
+                {
+                    <tr><td colspan="4" class="muted">Chưa có đơn hàng.</td></tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="toolbar" style="margin-top:10px"><a class="btn btn-sm" href="@Url.Action("Index", "AdminOrder")">Xem tất cả đơn</a></div>
+    </div>
+
+    <div class="card">
+        <h2>Sắp hết hàng (tồn kho ≤ 5)</h2>
+        <div class="table-scroll">
+            <table class="grid">
+                <thead><tr><th>Sản phẩm</th><th>Size / Màu</th><th class="num">Tồn</th></tr></thead>
+                <tbody>
+                @foreach (var v in Model.LowStock)
+                {
+                    <tr>
+                        <td><a href="@Url.Action("Details", "AdminProduct", new { id = v.ProductId })">@v.ProductName</a></td>
+                        <td>@v.Size / @v.Color</td>
+                        <td class="num"><strong>@v.StockQuantity</strong></td>
+                    </tr>
+                }
+                @if (!Model.LowStock.Any())
+                {
+                    <tr><td colspan="3" class="muted">Không có biến thể nào sắp hết.</td></tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Đơn hàng theo trạng thái</h2>
+    <div class="tabs">
+        @foreach (var s in OrderStatus.All)
+        {
+            int n;
+            Model.OrdersByStatus.TryGetValue(s, out n);
+            <a href="@Url.Action("Index", "AdminOrder", new { status = s })">@OrderStatus.Label(s): @n</a>
+        }
+    </div>
+</div>
