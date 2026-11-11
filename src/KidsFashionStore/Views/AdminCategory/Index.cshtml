@@ -1,0 +1,48 @@
+﻿@model List<KidsFashionStore.Models.ViewModels.Admin.CategoryRowViewModel>
+@{
+    ViewBag.Title = "Quản lý danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="toolbar">
+    <a class="btn btn-primary" href="@Url.Action("Create")">+ Thêm danh mục</a>
+    <span class="muted">Menu 2 cấp trên website được lấy từ bảng này.</span>
+</div>
+
+<div class="card">
+    <div class="table-scroll">
+        <table class="grid">
+            <thead>
+                <tr><th>Tên danh mục</th><th>Cấp</th><th class="num">Danh mục con</th><th class="num">Sản phẩm</th><th>Trạng thái</th><th>Thao tác</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var c in Model)
+            {
+                <tr class="@(c.Level == 1 ? "child-row" : "")">
+                    <td>@(c.Level == 1 ? "↳ " : "")<strong>@c.CategoryName</strong></td>
+                    <td>@(c.Level == 0 ? "Cha" : "Con")</td>
+                    <td class="num">@c.ChildCount</td>
+                    <td class="num">@c.ProductCount</td>
+                    <td><span class="badge @(c.IsActive ? "badge-active" : "badge-hidden")">@(c.IsActive ? "Hiển thị" : "Đã ẩn")</span></td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-sm" href="@Url.Action("Details", new { id = c.CategoryId })">Chi tiết</a>
+                            <a class="btn btn-sm" href="@Url.Action("Edit", new { id = c.CategoryId })">Sửa</a>
+                            @using (Html.BeginForm("ToggleActive", "AdminCategory", new { id = c.CategoryId }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm">@(c.IsActive ? "Ẩn" : "Hiện")</button>
+                            }
+                            <a class="btn btn-sm btn-danger" href="@Url.Action("Delete", new { id = c.CategoryId })">Xóa</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="6" class="muted">Chưa có danh mục nào.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

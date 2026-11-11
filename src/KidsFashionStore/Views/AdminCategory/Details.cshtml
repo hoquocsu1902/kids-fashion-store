@@ -1,0 +1,45 @@
+﻿@model KidsFashionStore.Models.ViewModels.Admin.CategoryRowViewModel
+@{
+    ViewBag.Title = "Chi tiết danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var children = (List<KidsFashionStore.Models.ViewModels.Admin.CategoryRowViewModel>)ViewBag.Children;
+}
+<div class="card">
+    <table class="grid">
+        <tr><th style="width:180px">Tên danh mục</th><td><strong>@Model.CategoryName</strong></td></tr>
+        <tr><th>Cấp</th><td>@(Model.Level == 0 ? "Cha (cấp 1)" : "Con (cấp 2) - thuộc: " + Model.ParentName)</td></tr>
+        <tr><th>Mô tả</th><td>@(string.IsNullOrEmpty(Model.Description) ? "-" : Model.Description)</td></tr>
+        <tr><th>Trạng thái</th><td><span class="badge @(Model.IsActive ? "badge-active" : "badge-hidden")">@(Model.IsActive ? "Hiển thị" : "Đã ẩn")</span></td></tr>
+        <tr><th>Số sản phẩm</th><td>@Model.ProductCount</td></tr>
+        <tr><th>Số danh mục con</th><td>@Model.ChildCount</td></tr>
+    </table>
+    <div class="actions" style="margin-top:12px">
+        <a class="btn btn-primary" href="@Url.Action("Edit", new { id = Model.CategoryId })">Sửa</a>
+        @if (Model.Level == 0)
+        {
+            <a class="btn" href="@Url.Action("Create", new { parentId = Model.CategoryId })">+ Thêm danh mục con</a>
+        }
+        <a class="btn" href="@Url.Action("Index", "AdminProduct", new { categoryId = Model.CategoryId })">Xem sản phẩm</a>
+        <a class="btn" href="@Url.Action("Index")">Quay lại</a>
+    </div>
+</div>
+
+@if (children != null && children.Any())
+{
+    <div class="card">
+        <h2>Danh mục con</h2>
+        <table class="grid">
+            <thead><tr><th>Tên</th><th class="num">Sản phẩm</th><th>Trạng thái</th></tr></thead>
+            <tbody>
+            @foreach (var c in children)
+            {
+                <tr>
+                    <td><a href="@Url.Action("Details", new { id = c.CategoryId })">@c.CategoryName</a></td>
+                    <td class="num">@c.ProductCount</td>
+                    <td>@(c.IsActive ? "Hiển thị" : "Đã ẩn")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,28 @@
+﻿@model KidsFashionStore.Models.ViewModels.Admin.CategoryRowViewModel
+@{
+    ViewBag.Title = "Xóa danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool blocked = Model.ChildCount > 0 || Model.ProductCount > 0;
+}
+<div class="card">
+    <p>Bạn có chắc muốn xóa danh mục <strong>@Model.CategoryName</strong>?</p>
+    @if (Model.ChildCount > 0)
+    {
+        <div class="alert alert-warn">Danh mục này đang có <strong>@Model.ChildCount</strong> danh mục con nên chưa thể xóa.</div>
+    }
+    @if (Model.ProductCount > 0)
+    {
+        <div class="alert alert-warn">Danh mục này đang có <strong>@Model.ProductCount</strong> sản phẩm nên chưa thể xóa. Hãy chuyển sản phẩm sang danh mục khác hoặc chỉ "Ẩn" danh mục.</div>
+    }
+    @using (Html.BeginForm("Delete", "AdminCategory", new { id = Model.CategoryId }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="actions">
+            @if (!blocked)
+            {
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+            }
+            <a class="btn" href="@Url.Action("Index")">Quay lại</a>
+        </div>
+    }
+</div>
